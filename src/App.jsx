@@ -8,6 +8,7 @@ const Missing = lazy(() => import('./pages/Missing'));
 const PersistLogin = lazy(() => import('./pages/helpers/PersistLogin'));
 const RequireAuth = lazy(() => import('./pages/helpers/RequireAuth'));
 const Home = lazy(() => import('./pages/Home'));
+const Shop = lazy(() => import('./pages/Shop'))
 
 const ROLES = {
   'User': 2001,
@@ -19,15 +20,15 @@ function App() {
   return (
     <Routes>
       <Route path='/' element={<Layout />}>
-
         <Route element={<AuthLayout />} >
-          <Route path='login' element={<Login />} />
+          <Route path='/' element={<Login />} />
           <Route path='register' element={<Register />} />
         </Route>
 
         <Route element={<PersistLogin />}>
           <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
-            <Route path="/" element={<Home />} />
+            <Route index path="/home" element={<Home />} />
+            <Route index path="/shop" element={<Shop />} />
           </Route>
         </Route>
 

@@ -14,7 +14,7 @@ function Login() {
     const { setAuth } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
-    const from = location.state?.from?.pathname || "/"
+    const from = location.state?.from?.pathname || "/home"
 
     const userRef = useRef();
     const errRef = useRef();

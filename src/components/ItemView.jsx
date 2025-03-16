@@ -4,7 +4,7 @@ function ItemView(props) {
     const [isSoldout, setIsSoldout] = useState(false)
 
     return (
-        <div className="w-full h-100 flex flex-col justify-center items-center">
+        <div className="w-full flex flex-col justify-center items-center">
             <div className={isSoldout ? "absolute" : "hidden"}>
                 <p className="px-2 py-3.5 leading-3 text-sm text-center tracking-tight uppercase bg-orange-400 rounded-full text-zinc-100">Sold <br />Out</p>
             </div>

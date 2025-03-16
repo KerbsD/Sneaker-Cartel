@@ -14,11 +14,12 @@ function useRefreshToken() {
             return {
                 ...prev,
                 roles: response.data.roles,
-                accessToken: response.data.accessToken,
-                user: response.data.user, 
                 id: response.data.id,
-
-            }
+                fullname: response.data.fullname,
+                mail: response.data.email, 
+                accessToken: response.data.accessToken,
+                number: response.data.number,
+            };
         });
         return response.data.accessToken;
     }

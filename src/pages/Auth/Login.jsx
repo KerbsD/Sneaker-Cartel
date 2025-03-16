@@ -43,11 +43,14 @@ function Login() {
                 }
             );
             console.log(JSON.stringify(response?.data));
-            // console.log(JSON.stringify(response));
+            console.log(JSON.stringify(response));
             const accessToken = response?.data?.accessToken;
             const roles = response?.data?.roles;
             const id = response?.data?.id;
-            setAuth({ email, roles, accessToken, id });
+            const fullname = response?.data?.fullname;
+            const number = response?.data?.number;
+            const mail = response?.data?.email;
+            setAuth({ mail, roles, accessToken, id, fullname, number });
             resetEmail('');
             setPwd('');
             navigate(from, { replace: true })
@@ -107,7 +110,7 @@ function Login() {
                     <label className='ml-1 text-zinc-50 text-xs' htmlFor="persist">Trust this Device</label>
                 </div>
                 <p className="text-center text-zinc-50 text-xs">Doesn't have an account?
-                    <Link to={"/register"}>
+                    <Link to={"register"}>
                         <span className="text-green-700 ml-1">Sign up</span>
                     </Link>
                 </p>

@@ -2,10 +2,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import NavLink from './NavLink';
 import useScrollPosition from '../hooks/useScrollPosition';
-import useLogout from '../hooks/useLogout';
 
 function Navbar() {
-    const logout = useLogout();
     const navigate = useNavigate();
     const scrollPosition = useScrollPosition();
     const [isScroll, setIsScroll] = useState(false);
@@ -40,8 +38,12 @@ function Navbar() {
                     <NavLink isScroll={isScroll} link="/lookbook" label="Lookbook" />
                 </div>
                 <div className="flex items-center justify-center gap-3">
-                    <img src="/resources/cart.svg" className={isScroll ? 'w-8 h-8' : 'w-8 h-8 invert'} alt="" />
-                    <img onClick={logOut} src="/resources/logout.svg" className={isScroll ? 'w-8 h-8' : 'w-8 h-8 invert'} alt="" />
+                    <Link to="/cart">
+                        <img src="/resources/cart.svg" className={isScroll ? 'w-8 h-8' : 'w-8 h-8 invert'} alt="" />
+                    </Link>
+                    <Link to="/profile">
+                        <img src="/resources/user.svg" className={isScroll ? 'w-8 h-8' : 'w-8 h-8 invert'} alt="" />
+                    </Link>
                 </div>
             </nav>
 
@@ -49,14 +51,11 @@ function Navbar() {
             <div className={isOpen ? 'w-screen h-screen bg-zinc-50 top-0 duration-200 fixed' : 'w-0 h-screen bg-zinc-50 top-0 duration-200 fixed'}>
                 <div className={isOpen ? "block" : "hidden"}>
                     <img onClick={toggleMenu} src="/resources/close.svg" className='w-9 h-9 mx-5 my-10 bg-zinc-50 rounded-xs p-1 top-0 right-0.5 relative' alt="" />
-                    <div>
+                    <div onClick={toggleMenu}>
                         <NavLink link="/home" label="Home" />
                         <NavLink link="/shop" label="Shop" />
                         <NavLink link="/blog" label="Blog" />
                         <NavLink link="/lookbook" label="Lookbook" />
-                    </div>
-                    <div>
-
                     </div>
                 </div>
             </div>

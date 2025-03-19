@@ -1,5 +1,3 @@
-import Navbar from "../components/Navbar";
-import Footer from '../components/Footer';
 import useAuth from '../hooks/useAuth';
 import useLogout from '../hooks/useLogout';
 import { faPhone, faEnvelope, faUser } from "@fortawesome/free-solid-svg-icons";
@@ -35,6 +33,7 @@ function Profile() {
             <Banner icon={faUser} label={"Fullname:"} content={auth.fullname} />
             <Banner icon={faPhone} label={"Mobile Number:"} content={auth.number} />
             <Banner icon={faEnvelope} label={"Email:"} content={auth.mail} />
+            <button onClick={logOut}>Dito yung logout</button>
         </div>
     )
 }

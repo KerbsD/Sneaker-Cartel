@@ -38,21 +38,18 @@ function Home() {
     }, [])
 
     const handleAddToCart = (id, brand, color, price) => {
-        const info = {
+        const itemDetails = {
             user_id: auth.id,
             items: [
                 {
                     product_id: id,
-                    brand: brand,
                     size: 10,
-                    color: color,
-                    quantity: 1,
-                    price: price
+                    quantity: 1, 
                 }
             ]
         }
 
-        console.log(info)
+        console.log(itemDetails)
     }
 
     return (

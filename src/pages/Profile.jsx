@@ -2,8 +2,10 @@ import useAuth from '../hooks/useAuth';
 import useLogout from '../hooks/useLogout';
 import { faPhone, faEnvelope, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useNavigate } from 'react-router-dom';
 
 function Profile() {
+    const navigate = useNavigate();
     const { auth } = useAuth();
     const logout = useLogout();
 

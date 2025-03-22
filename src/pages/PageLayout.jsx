@@ -4,7 +4,7 @@ import Footer from '../components/Footer';
 
 function PageLayout(props) {
     return (
-        <div className='scroll-smooth'>
+        <div className='scroll-smooth no-scrollbar'>
             <div className='h-[10vh] snap-start'>
                 <Navbar />
                 {props.extra}

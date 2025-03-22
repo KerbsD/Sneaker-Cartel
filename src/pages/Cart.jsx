@@ -9,7 +9,11 @@ function Cart() {
                 <div className="pl-5">
                     <p className="text-zinc-100 text-sm">{props.brand}</p>
                     <p className="text-zinc-100 text-xl font-bold">{props.variant}</p>
-                    <p className="text-zinc-100 font-light">{props.price}</p>
+                    <div className="flex items-center gap-2">
+                        <p className="text-zinc-100 font-light">{props.price}</p>
+                        <p className="text-zinc-100 font-light">Qty: 1</p>
+                        <p className="text-zinc-100 font-light">Size: 11</p>
+                    </div>
                 </div>
                 <div className="ml-auto">
                     <img src="/resources/close.svg" className="invert w-7" alt="" />

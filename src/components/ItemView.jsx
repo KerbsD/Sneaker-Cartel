@@ -21,7 +21,7 @@ function ItemView(props) {
                         <img src="/resources/add.svg" className="w-6 h-6 ml-1" alt="" />
                     </div>
                 </div>
-            </div>
+            </div>  
         </div>
     )
 }

@@ -12,6 +12,7 @@ const Shop = lazy(() => import('./pages/Shop'));
 const Profile = lazy(() => import('./pages/Profile'));
 const Cart = lazy(() => import('./pages/Cart'))
 const PageLayout = lazy(() => import('./pages/PageLayout'));
+const Test = lazy(() => import('./pages/Test'))
 
 const ROLES = {
   'User': 2001,
@@ -23,6 +24,7 @@ function App() {
   return (
     <Routes>
       <Route path='/' element={<Layout />}>
+        <Route path='test' element={<Test/>} />
         <Route element={<AuthLayout />} >
           <Route path='/' element={<Login />} />
           <Route path='register' element={<Register />} />

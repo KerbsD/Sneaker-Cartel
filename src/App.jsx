@@ -11,8 +11,10 @@ const Home = lazy(() => import('./pages/Home'));
 const Shop = lazy(() => import('./pages/Shop'));
 const Profile = lazy(() => import('./pages/Profile'));
 const Cart = lazy(() => import('./pages/Cart'))
+// const Test = lazy(() => import('./pages/Admin Pages/Test'));
 const PageLayout = lazy(() => import('./pages/PageLayout'));
-const Test = lazy(() => import('./pages/Test'))
+const ListShoe = lazy(() => import('./pages/Admin Pages/Add'));
+
 
 const ROLES = {
   'User': 2001,
@@ -24,7 +26,6 @@ function App() {
   return (
     <Routes>
       <Route path='/' element={<Layout />}>
-        <Route path='test' element={<Test/>} />
         <Route element={<AuthLayout />} >
           <Route path='/' element={<Login />} />
           <Route path='register' element={<Register />} />
@@ -33,6 +34,7 @@ function App() {
         <Route element={<PersistLogin />}>
           <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
             <Route path='/' element={<PageLayout />}>
+              <Route path='add-shoe' element={<ListShoe/>} />
               <Route path="home" element={<Home />} />
               <Route path="shop" element={<Shop />} />
               <Route path="profile" element={<Profile />} />

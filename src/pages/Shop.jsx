@@ -44,16 +44,12 @@ function Shop() {
         <div className="mx-4">
             <h2 className='text-3xl my-5 text-zinc-100 uppercase font-bold tracking-tight'>Shop</h2>
             <div className="overflow-x-scroll">
-                <div class="relative inline-block">
-                    <div class="flex space-x-4 snap-x snap-mandatory overflow-x-auto no-scrollbar">
+                <div className="relative inline-block">
+                    <div className="flex space-x-4 snap-x snap-mandatory overflow-x-auto no-scrollbar">
                         <Brands label={"All"} />
                         <Brands label={"Nike"} />
                         <Brands label={"Adidas"} />
                         <Brands label={"New Balance"} />
-                        <Brands label={"Nike"} />
-                        <Brands label={"Nike"} />
-                        <Brands label={"Nike"} />
-                        <Brands label={"Nike"} />
                     </div>
                 </div>
             </div>

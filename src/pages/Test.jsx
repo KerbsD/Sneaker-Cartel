@@ -12,24 +12,32 @@ const FileUpload = () => {
     }
 
     async function uploadMultipleFiles(files) {
-        const uploadPromises = Array.from(files).map(file => {
-            return supabase.storage
-                .from('sneaker-cartel')
-                .upload(`Gallery/${file.name}`, file)
-        });
+        setUploading(true)
+        try {
+            const uploadPromises = Array.from(files).map(file => {
+                return supabase.storage
+                    .from('sneaker-cartel')
+                    .upload(`Gallery/${file.name}`, file)
+            });
 
-        const results = await Promise.all(uploadPromises)
-        if(uploadPromises){
-            getMedia();
-        }
-
-        results.forEach((result, index) => {
-            if (result.error) {
-                console.error(`Error uploading file ${files[index].name}:`, result.error)
-            } else {
-                console.log(`File ${files[index].name} uploaded successfully:`, result.data)
+            const results = await Promise.all(uploadPromises)
+            if (uploadPromises) {
+                getMedia();
+                setUploading(false)
             }
-        })
+
+
+            results.forEach((result, index) => {
+                if (result.error) {
+                    console.error(`Error uploading file ${files[index].name}:`, result.error)
+                } else {
+                    console.log(`File ${files[index].name} uploaded successfully:`, result.data)
+                }
+            })
+
+        } catch (err) {
+            console.err(err);
+        }
     }
 
     // const handleUpload = async () => {
@@ -89,9 +97,14 @@ const FileUpload = () => {
 
     return (
         <div>
-            <input className='text-zinc-100' type="file" multiple onChange={handleFileChange} />
-            <button onClick={() => uploadMultipleFiles(files)} disabled={uploading}>
-                {uploading ? "Uploading..." : "Upload"}
+            <input
+                type="file"
+                className="text-stone-100 file:mr-5 file:py-1 file:px-3 file:border-[1px] file:rounded-md file:font-medium file:bg-stone-50 file:text-stone-700 hover:file:cursor-pointer hover:file:bg-blue-50 hover:file:text-orange-700"
+                multiple
+                onChange={handleFileChange}
+            />
+            <button className='bg-green-600 text-stone-100 py-1 px-3 rounded-md border-green-800 border-2 w-20 h-10' onClick={() => uploadMultipleFiles(files)} disabled={uploading}>
+                {uploading ? <div className='border-2 w-5 h-5 border-t-green-600 animate-spin rounded-full mx-auto'></div> : "Upload"}
             </button>
             <div className='mt-5 text-zinc-100'>
                 My Uploads

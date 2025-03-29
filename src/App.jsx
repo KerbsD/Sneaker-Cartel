@@ -14,6 +14,7 @@ const Cart = lazy(() => import('./pages/Cart'))
 // const Test = lazy(() => import('./pages/Admin Pages/Test'));
 const PageLayout = lazy(() => import('./pages/PageLayout'));
 const ListShoe = lazy(() => import('./pages/Admin Pages/Add'));
+const ShoeDetails = lazy(() => import('./pages/ShoeDetails'));
 
 
 const ROLES = {
@@ -39,6 +40,7 @@ function App() {
               <Route path="shop" element={<Shop />} />
               <Route path="profile" element={<Profile />} />
               <Route path="cart" element={<Cart />} />
+              <Route path=":shoeId" element={<ShoeDetails />} />
             </Route>
           </Route>
         </Route>

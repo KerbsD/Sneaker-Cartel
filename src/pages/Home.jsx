@@ -2,7 +2,8 @@ import useAuth from '../hooks/useAuth';
 import Carousel from '../components/Carousel';
 import ItemView from '../components/ItemView';
 import { useState, useEffect } from 'react';
-import useAxiosPrivate from '../hooks/useAxiosPrivate'
+import useAxiosPrivate from '../hooks/useAxiosPrivate';
+import { motion } from "motion/react"
 
 function Home() {
     const { auth } = useAuth();
@@ -18,7 +19,6 @@ function Home() {
                 const response = await axiosPrivate.get('/shoes', {
                     signal: controller.signal
                 });
-                console.log(response.data);
                 isMounted && setShoeList(response.data);
             } catch (err) {
                 console.error(err);
@@ -29,11 +29,11 @@ function Home() {
 
         getAllShoes();
 
-        console.log(shoeList)
-
         return () => {
             isMounted = false;
-            controller.abort();
+            setTimeout(() => {
+                controller.abort();
+            }, 1000)
         }
     }, [])
 
@@ -44,7 +44,7 @@ function Home() {
                 {
                     product_id: id,
                     size: 10,
-                    quantity: 1, 
+                    quantity: 1,
                 }
             ]
         }
@@ -62,9 +62,16 @@ function Home() {
                 <div className='grid grid-cols-2 mx-4 gap-4 md:grid-cols-3 place-items-strech md:mx-0'>
                     {
                         shoeList?.map((shoe) => (
-                            <ItemView key={shoe._id} event={() => handleAddToCart(shoe._id, shoe.brand, shoe.color, shoe.price)} Ipath={"/items/samba.png"} Ibrand={shoe.brand} Iname={shoe.model} Iprice={shoe.price} />
-                        )
-                        )
+                            <motion.div
+                                key={shoe._id}
+                                initial={{ opacity: 0 }}
+                                whileInView={{ opacity: 1 }}
+                                transition={{ duration: 0.8 }}
+                                viewport={{ amount: 0.5 }}
+                            >
+                                <ItemView key={shoe._id} event={() => handleAddToCart(shoe._id, shoe.brand, shoe.color, shoe.price)} Icolor={shoe.color} folder={shoe.model} name={shoe.images[0]} Ibrand={shoe.brand} Iname={shoe.model} Iprice={shoe.price} />
+                            </motion.div>
+                        ))
                     }
                 </div>
             </div>

@@ -14,13 +14,14 @@ function ListShoe() {
     const [sizes, setSizes] = useState([]);
     const [stocks, setStocks] = useState([]);
     const [files, setFile] = useState([]);
-    const [images, setImages] = useState([])
 
     const axiosPrivate = useAxiosPrivate()
 
+    let images = [];
+
     const addItem = (size, stock) => {
-        if (size == 0 && stock == 0) {
-            alert("no")
+        if (size == 0 && stock == 0 || !size && !stock) {
+            alert("Stock and Size should have a value.")
         } else {
             setSizes((prev) => [...prev, size]);
             setStocks((prev) => [...prev, stock]);
@@ -29,28 +30,21 @@ function ListShoe() {
         }
     };
 
+    for (let i = 0; i < files.length; i++) {
+        images.push(files[i].name);
+    }
+
     const handleFileChange = (e) => {
-        setFile(e.target.files); 
-        
-        for (let i = 0; i < files.length; i++) {
-        setImages(prev => [...prev, files[i].name]);
-        console.log(images)
+        setFile(e.target.files);
     }
 
-    }
-
-    // Using a for loop
-   
     const handleShoeData = async () => {
-        let imageName
-
-
-        if (!brand || !model || !color || !size || !stock || !price || !stocks || !sizes || !files) {
+        if (!brand || !model || !color || !price || !stocks || !sizes || !files) {
             alert("Missing details")
             return
         }
 
-        if (price == 0) {
+        if (price == 0 || !price) {
             alert("Price can't be zero")
             return
         }
@@ -63,12 +57,12 @@ function ListShoe() {
             "size": sizes,
             "price": price,
             "description": description,
-            "images": imageName,
+            "images": images,
             "stocks":
                 sizes.map((size, index) => (
                     {
-                        "size": size, // Assign individual size
-                        "stock": stocks[index], // Ensure stock is an array with a corresponding value for each size
+                        "size": size, 
+                        "stock": stocks[index], 
                     }
                 ))
         }
@@ -77,7 +71,7 @@ function ListShoe() {
 
         try {
             const response = await axiosPrivate.post('/shoes', shoeDetails);
-            console.log(JSON.stringify(response))
+            console.log("Shoe upload successful", response);
         } catch (err) {
             if (!err?.response) {
                 console.log(err);
@@ -88,7 +82,6 @@ function ListShoe() {
             }
         }
     }
-
 
     return (
         <div className="">
@@ -146,15 +139,11 @@ function ListShoe() {
                     }
                 </div>
                 <div className="flex flex-col w-[30vw]">
-                    {/* <label className=" text-stone-100 font-light py-2">Images: </label>
-                    <input className="bg-stone-100 p-1 rounded-sm w-full" type="file" />
-                    <p className="py-2 text-stone-100">Preview:</p> */}
-                    <input className='text-zinc-100' type="file" multiple onChange={handleFileChange} />
+                    <input className="mt-2 relative block w-full min-w-0 flex-auto cursor-pointer rounded border border-solid border-secondary-500 bg-transparent bg-clip-padding px-3 py-[0.32rem] text-xs font-normal text-surface transition duration-300 ease-in-out file:-mx-3 file:-my-[0.32rem] file:me-3 file:cursor-pointer file:overflow-hidden file:rounded-none file:border-0 file:border-e file:border-solid file:border-inherit file:bg-transparent file:px-3  file:py-[0.32rem] file:text-surface focus:border-primary focus:text-gray-700 focus:shadow-inset focus:outline-none dark:border-white/70 dark:text-white  file:dark:text-white" type="file" multiple onChange={handleFileChange} />
                     <FileUpload folderName={model} images={files} />
                 </div>
             </div>
-            <Button label={"Add Shoe"} style={"bg-orange-400 text-zinc-50 px-2 mt-10"}></Button>
-            <button onClick={handleShoeData}>Test</button>
+            <Button onclick={handleShoeData} label={"Add Shoe"} style={"bg-orange-400 text-zinc-50 px-2 mt-10 mx-3 active:bg-orange-800"}></Button>
         </div>
     )
 }

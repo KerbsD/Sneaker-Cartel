@@ -2,7 +2,13 @@ import { useParams } from 'react-router-dom';
 import useAxiosPrivate from '../hooks/useAxiosPrivate';
 import Loading from '../components/Loading';
 import { useState, useEffect } from 'react';
-import supabase from './helpers/SupabaseClient';
+import { IoBagAdd } from "react-icons/io5";
+import { motion } from "motion/react"
+import useAuth from "../hooks/useAuth";
+import { Link } from 'react-router-dom'
+import { MdOutlineKeyboardBackspace } from "react-icons/md";
+import { debounce } from "lodash";
+
 
 function ShoeDetails() {
     const { shoeId } = useParams();
@@ -11,12 +17,15 @@ function ShoeDetails() {
     const [selectedSize, setSelectedSize] = useState();
     const axiosPrivate = useAxiosPrivate();
     const [loading, setLoading] = useState(true);
-    const [media, setMedia] = useState();
+    const [medias, setMedias] = useState();
     const [main, setMain] = useState();
-    
+    const [quantity, setQuantity] = useState(1)
+    const { auth } = useAuth();
+
     useEffect(() => {
+        window.scrollTo(0, 0);
         let isMounted = true;
-        
+
         const getShoeDetails = async () => {
             try {
                 const response = await axiosPrivate.get(`/shoes/${shoeId}`, {
@@ -24,16 +33,18 @@ function ShoeDetails() {
                 });
                 console.log(response.data);
                 setMain(response.data.images[0])
-                setSelectedSize(response.data.size[0])
+                const sizes = response.data.size;
+                setSelectedSize(Math.min(...sizes))
                 setLoading(false)
+                setMedias(response.data.images)
                 isMounted && setShoeDetails(response.data);
             } catch (err) {
                 console.error(err);
             }
         }
-        
+
         getShoeDetails();
-        
+
         return () => {
             isMounted = false;
             setTimeout(() => {
@@ -42,27 +53,9 @@ function ShoeDetails() {
         }
     }, []);
 
-    console.log(selectedSize)
-
     useEffect(() => {
-        if (shoeDetails.model) {
-            const getMedia = async () => {
-                const { data, error } = await supabase.storage.from('sneaker-cartel').list('Gallery/' + `${shoeDetails.model}`, {
-                    limit: 10,
-                    offset: 0
-                });
 
-                if (data) {
-                    setMedia(data);
-                    console.log(data);
-                } else {
-                    console.log(71, error);
-                }
-            };
-
-            getMedia();
-        }
-    }, [shoeDetails.model]);
+    }, []);
 
     const stocks = shoeDetails.stocks;
 
@@ -73,18 +66,49 @@ function ShoeDetails() {
         stock.push(i);
     }
 
+    const handleAddToCart = debounce(async (id, size, quantity) => {
+        const itemDetails = {
+            user_id: auth.id,
+            items: [
+                {
+                    product_id: id,
+                    size: size,
+                    quantity: quantity,
+                }
+            ]
+        }
+
+        try {
+            const response = await axiosPrivate.post('/carts', itemDetails);
+            console.log("Shoe upload successful", response);
+        } catch (err) {
+            if (!err?.response) {
+                console.log(err);
+            } else if (err.response?.status === 400) {
+                console.log('Invalid type provided.');
+            } else {
+                console.log(err)
+            }
+        }
+    }, 500)
+
     return (
         <div className='mx-4'>
+            <Link to={'/shop'}>
+                <div className='flex items-center gap-3 w-15'>
+                    <MdOutlineKeyboardBackspace className="invert my-3" size={30} />
+                </div>
+            </Link>
             <div className='h-60 my-3'>
-                <img className='max-w-full max-h-full object-contain mx-auto rounded-md' src={`https://begpetjiutjcxrwmwdof.supabase.co/storage/v1/object/public/sneaker-cartel/Gallery/${shoeDetails.model}/${main}`} alt="" />
+                <img className='max-w-full max-h-full object-contain mx-auto rounded-md duration-300' src={`https://begpetjiutjcxrwmwdof.supabase.co/storage/v1/object/public/sneaker-cartel/Gallery/${shoeDetails.model}/${main}`} alt="" />
             </div>
             <div className="overflow-x-scroll my-3">
-                <div className='relative w-[700px]'>
+                <div className='relative w-[800px]'>
                     <div className="flex space-x-4 snap-x snap-mandatory overflow-x-auto no-scrollbar">
                         {
-                            media && media.map((med) =>
-                                <div onClick={() => setMain(med.name)} key={med.id}>
-                                    <img className='h-20' src={`https://begpetjiutjcxrwmwdof.supabase.co/storage/v1/object/public/sneaker-cartel/Gallery/${shoeDetails.model}/${med.name}`} alt='no Image' />
+                            medias && medias.map((media) =>
+                                <div onClick={() => setMain(media)} key={media}>
+                                    <img className='h-20' src={`https://begpetjiutjcxrwmwdof.supabase.co/storage/v1/object/public/sneaker-cartel/Gallery/${shoeDetails.model}/${media}`} alt='no Image' />
                                 </div>
                             )
                         }
@@ -122,15 +146,25 @@ function ShoeDetails() {
                         <div>
                             <p className='text-stone-100 text-base'>Quantity:</p>
                             {
-                                <select className='bg-stone-100 px-1 w-10 font-bold outline-none'>
-                                    {stock.map((number) => (
-                                        <option className='font-bold' key={number} value={number}>
-                                            {number}
-                                        </option>
-                                    ))}
+                                <select className='bg-stone-100 px-1 w-10 font-bold outline-none'
+                                    onChange={(e) => setQuantity(parseInt(e.target.value))}>
+                                    {
+                                        stock.map((number) => (
+                                            <option className='font-bold' key={number} value={number}>
+                                                {number}
+                                            </option>
+                                        ))
+                                    }
                                 </select>
                             }
                         </div>
+                        <motion.button
+                            onClick={() => handleAddToCart(shoeDetails._id, selectedSize, quantity)}
+                            whileTap={{ scale: 0.9 }}
+                            className='mx-auto border rounded-md px-4 my-14 text-2xl bg-green-600 text-stone-100 border-green-800 font-bold py-2 active:bg-green-800 active:text-stone-300 duration-300 flex items-center'
+                        >
+                            <IoBagAdd className='mr-4' size={30} />Add to Bag
+                        </motion.button>
                     </div>
             }
         </div >

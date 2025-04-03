@@ -4,6 +4,7 @@ import ItemView from '../components/ItemView';
 import { useState, useEffect } from 'react';
 import useAxiosPrivate from '../hooks/useAxiosPrivate';
 import { motion } from "motion/react"
+import { Link } from "react-router-dom"
 
 function Home() {
     const { auth } = useAuth();
@@ -37,21 +38,6 @@ function Home() {
         }
     }, [])
 
-    const handleAddToCart = (id, brand, color, price) => {
-        const itemDetails = {
-            user_id: auth.id,
-            items: [
-                {
-                    product_id: id,
-                    size: 10,
-                    quantity: 1,
-                }
-            ]
-        }
-
-        console.log(itemDetails)
-    }
-
     return (
         <>
             <div className="h-screen">
@@ -69,7 +55,9 @@ function Home() {
                                 transition={{ duration: 0.8 }}
                                 viewport={{ amount: 0.5 }}
                             >
-                                <ItemView key={shoe._id} event={() => handleAddToCart(shoe._id, shoe.brand, shoe.color, shoe.price)} Icolor={shoe.color} folder={shoe.model} name={shoe.images[0]} Ibrand={shoe.brand} Iname={shoe.model} Iprice={shoe.price} />
+                                <Link to={`/${shoe._id}`} key={shoe._id}>
+                                    <ItemView key={shoe._id} event={() => handleAddToCart(shoe._id, shoe.brand, shoe.color, shoe.price)} Icolor={shoe.color} folder={shoe.model} name={shoe.images[0]} Ibrand={shoe.brand} Iname={shoe.model} Iprice={shoe.price} />
+                                </Link>
                             </motion.div>
                         ))
                     }

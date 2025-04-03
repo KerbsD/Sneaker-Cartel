@@ -34,8 +34,6 @@ function Navbar() {
                 <div className='hidden md:flex md:flex-row md:gap-14 md:-inset-0-x'>
                     <NavLink isScroll={isScroll} link="/home" label="Home" />
                     <NavLink isScroll={isScroll} link="/shop" label="Shop" />
-                    <NavLink isScroll={isScroll} link="/blog" label="Blog" />
-                    <NavLink isScroll={isScroll} link="/lookbook" label="Lookbook" />
                 </div>
                 <div className="flex items-center justify-center gap-3">
                     <Link to="/cart">
@@ -52,10 +50,8 @@ function Navbar() {
                 <div className={isOpen ? "block" : "hidden"}>
                     <img onClick={toggleMenu} src="/resources/close.svg" className='w-9 h-9 mx-5 my-10 bg-zinc-50 rounded-xs p-1 top-0 right-0.5 relative' alt="" />
                     <div onClick={toggleMenu}>
-                        <NavLink link="/home" label="Home" />
-                        <NavLink link="/shop" label="Shop" />
-                        <NavLink link="/blog" label="Blog" />
-                        <NavLink link="/lookbook" label="Lookbook" />
+                        <NavLink link="home" label="Home" />
+                        <NavLink link="shop" label="Shop" />
                     </div>
                 </div>
             </div>

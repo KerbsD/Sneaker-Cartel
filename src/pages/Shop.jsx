@@ -9,7 +9,6 @@ function Shop() {
     const [shoes, setShoes] = useState();
     const [sort, setSort] = useState(true);
     const [brand, setBrand] = useState("");
-    
 
     const Brands = (props) => {
         return (
@@ -50,13 +49,18 @@ function Shop() {
         <div className="mx-4">
             <h2 className='text-3xl my-5 text-zinc-100 uppercase font-bold tracking-tight'>Shop</h2>
             <div className="overflow-x-scroll">
-                <div className="relative inline-block"> 
+                <div className="relative inline-block">
                     <div className="flex space-x-4 snap-x snap-mandatory overflow-x-auto no-scrollbar">
                         <Brands onclick={() => setSort(true)} label={"All"} />
                         {
-                            shoes?.map(shoe => {
+                            shoes?.filter((shoe, index, self) =>
+                                index === self.findIndex((s) => s.brand === shoe.brand)
+                            ).map(shoe => {
                                 return (
-                                    <Brands onclick={() => { setSort(false); setBrand(shoe.brand) }} key={shoe._id} label={shoe.brand} />
+                                    <Brands onclick={() => {
+                                        setSort(false);
+                                        setBrand(shoe.brand)
+                                    }} key={shoe._id} label={shoe.brand} />
                                 )
                             })
                         }

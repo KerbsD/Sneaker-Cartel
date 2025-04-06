@@ -8,11 +8,11 @@ function ItemView(props) {
         <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            whileHover={{ scale: 1.01}}
             transition={{
-                duration: 0.6,
+                duration: 0.8,
                 ease: [0, 0.71, 0.2, 1.01],
             }}
+            whileTap={{ scale: 0.9 }}
             className="w-full h-full flex flex-col justify-center items-center"
         >
             <div className={isSoldout ? "absolute" : "hidden"}>

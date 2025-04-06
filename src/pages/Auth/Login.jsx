@@ -50,7 +50,8 @@ function Login() {
             const fullname = response?.data?.fullname;
             const number = response?.data?.number;
             const mail = response?.data?.email;
-            setAuth({ mail, roles, accessToken, id, fullname, number });
+            const address = response?.data?.address;
+            setAuth({ mail, roles, accessToken, id, fullname, number, address });
             resetEmail('');
             setPwd('');
             navigate(from, { replace: true })

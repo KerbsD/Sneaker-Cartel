@@ -1,3 +1,4 @@
+import { address } from 'motion/react-client';
 import axios from '../api/axios';
 import useAuth from './useAuth';
 
@@ -9,8 +10,8 @@ function useRefreshToken() {
             withCredentials: true
         });
         setAuth(prev => {
-            console.log(JSON.stringify(prev));
-            console.log(response.data.accessToken);
+            // console.log(JSON.stringify(prev));
+            // console.log(response.data.accessToken);
             return {
                 ...prev,
                 roles: response.data.roles,
@@ -19,6 +20,7 @@ function useRefreshToken() {
                 mail: response.data.email, 
                 accessToken: response.data.accessToken,
                 number: response.data.number,
+                address: response.data.address
             };
         });
         return response.data.accessToken;

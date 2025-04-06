@@ -11,11 +11,10 @@ const Home = lazy(() => import('./pages/Home'));
 const Shop = lazy(() => import('./pages/Shop'));
 const Profile = lazy(() => import('./pages/Profile'));
 const Cart = lazy(() => import('./pages/Cart'))
-// const Test = lazy(() => import('./pages/Admin Pages/Test'));
 const PageLayout = lazy(() => import('./pages/PageLayout'));
 const ListShoe = lazy(() => import('./pages/Admin Pages/Add'));
 const ShoeDetails = lazy(() => import('./pages/ShoeDetails'));
-
+const Checkout = lazy(() => import('./pages/Checkout'));
 
 const ROLES = {
   'User': 2001,
@@ -41,6 +40,7 @@ function App() {
               <Route path="profile" element={<Profile />} />
               <Route path="cart" element={<Cart />} />
               <Route path=":shoeId" element={<ShoeDetails />} />
+              <Route path="checkout" element={<Checkout />} />
             </Route>
           </Route>
         </Route>

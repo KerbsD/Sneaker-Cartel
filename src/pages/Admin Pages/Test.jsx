@@ -40,10 +40,7 @@ const Test = ({ folderName, images }) => {
         const { data, error } = await supabase.storage.from('sneaker-cartel').list('Gallery/' + model, {
             limit: 10,
             offset: 0,
-            sortBy: {
-                column: 'created_at', order:
-                    'desc'
-            }
+           
         });
 
         if (data) {

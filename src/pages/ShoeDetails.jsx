@@ -9,7 +9,6 @@ import { Link } from 'react-router-dom'
 import { MdOutlineKeyboardBackspace } from "react-icons/md";
 import { debounce } from "lodash";
 
-
 function ShoeDetails() {
     const { shoeId } = useParams();
     const controller = new AbortController();
@@ -21,6 +20,7 @@ function ShoeDetails() {
     const [main, setMain] = useState();
     const [quantity, setQuantity] = useState(1)
     const { auth } = useAuth();
+    const [bagWarn, setBagWarn] = useState();
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -80,7 +80,10 @@ function ShoeDetails() {
 
         try {
             const response = await axiosPrivate.post('/carts', itemDetails);
-            console.log("Shoe upload successful", response);
+            setBagWarn("Added to Bag.");
+            setTimeout(() => {
+                setBagWarn("")
+            }, 2000)
         } catch (err) {
             if (!err?.response) {
                 console.log(err);
@@ -90,15 +93,18 @@ function ShoeDetails() {
                 console.log(err)
             }
         }
-    }, 500)
+    }, 200)
 
     return (
         <div className='mx-4'>
-            <Link to={'/shop'}>
-                <div className='flex items-center gap-3 w-15'>
+            <div className='flex items-center justify-between'>
+                <Link to={'/shop'}>
                     <MdOutlineKeyboardBackspace className="invert my-3" size={30} />
-                </div>
-            </Link>
+                </Link>
+                <p className={ bagWarn ? 'bg-green-400 border border-green-700 px-2 py-0.5 rounded-lg text-stone-800 duration-200 fixed z-50 right-3' : "h-0 duration-100"}>
+                    {bagWarn}
+                </p>
+            </div>
             <div className='h-60 my-3'>
                 <img className='max-w-full max-h-full object-contain mx-auto rounded-md duration-300' src={`https://begpetjiutjcxrwmwdof.supabase.co/storage/v1/object/public/sneaker-cartel/Gallery/${shoeDetails.model}/${main}`} alt="" />
             </div>
@@ -108,7 +114,7 @@ function ShoeDetails() {
                         {
                             medias && medias.map((media) =>
                                 <div onClick={() => setMain(media)} key={media}>
-                                    <img className='h-20' src={`https://begpetjiutjcxrwmwdof.supabase.co/storage/v1/object/public/sneaker-cartel/Gallery/${shoeDetails.model}/${media}`} alt='no Image' />
+                                    <img className={ media == main ? 'h-20 border-orange-500 border rounded-md' : "h-20"} src={`https://begpetjiutjcxrwmwdof.supabase.co/storage/v1/object/public/sneaker-cartel/Gallery/${shoeDetails.model}/${media}`} alt='no Image' />
                                 </div>
                             )
                         }

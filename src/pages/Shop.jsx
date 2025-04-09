@@ -9,6 +9,7 @@ function Shop() {
     const [shoes, setShoes] = useState();
     const [sort, setSort] = useState(true);
     const [brand, setBrand] = useState("");
+    const [isLoading, setIsLoading] = useState(true)
 
     const Brands = (props) => {
         return (
@@ -19,6 +20,7 @@ function Shop() {
     }
 
     useEffect(() => {
+        setIsLoading(false);
         let isMounted = true;
         const controller = new AbortController();
 
@@ -29,6 +31,7 @@ function Shop() {
                         signal: controller.signal
                     });
                 console.log(response.data);
+                setIsLoading(true);
                 isMounted && setShoes(response.data);
             } catch (err) {
                 console.error(err);
@@ -71,7 +74,7 @@ function Shop() {
                 {
                     shoes?.filter(shoe => sort ? shoe.available === true : shoe.brand === brand).map((shoe) => (
                         <Link to={`/${shoe._id}`} key={shoe._id}>
-                            <ItemView key={shoe._id} event={() => handleAddToCart(shoe._id, shoe.brand, shoe.color, shoe.price)} Icolor={shoe.color} folder={shoe.model} name={shoe.images[0]} Ibrand={shoe.brand} Iname={shoe.model} Iprice={shoe.price} />
+                            <ItemView loading={isLoading} key={shoe._id} event={() => handleAddToCart(shoe._id, shoe.brand, shoe.color, shoe.price)} Icolor={shoe.color} folder={shoe.model} name={shoe.images[0]} Ibrand={shoe.brand} Iname={shoe.model} Iprice={shoe.price} />
                         </Link>
                     ))
                 }

@@ -4,14 +4,12 @@ import useAuth from "../../hooks/useAuth";
 import useInput from "../../hooks/useInput";
 import useToggle from "../../hooks/useToggle";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { useRef, useState, useEffect, Suspense, lazy } from 'react';
+import { useRef, useState, useEffect, lazy } from 'react';
 import Animate from "react-smooth";
 import axios from "../../api/axios";
 
-const Loading = lazy(() => import("../../components/Loading"));
-
 function Login() {
-    const { setAuth } = useAuth();
+    const { setAuth, auth } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
     const from = location.state?.from?.pathname || "/home"
@@ -72,9 +70,7 @@ function Login() {
 
     return (
         <>
-            <Suspense fallback={<Loading />} >
-                <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
-            </Suspense>
+            <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
             <img className="mx-auto relative bottom-18" src="/resources/logo.png" alt="" />
             <Animate to="1" from="0" attributeName="opacity" duration={500}>
                 <h1 className="uppercase tracking-tight mb-10 text-xl text-zinc-50 font-bold">Login</h1>

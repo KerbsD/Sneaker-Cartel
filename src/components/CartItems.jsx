@@ -6,7 +6,7 @@ const CartItem = (props) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{
-                duration: 0.6,
+                duration: 1,
                 ease: [0, 0.71, 0.2, 1.01]
             }}
             className="p-5 border border-t-0 border-b-zinc-100 border-x-0 mx-3 flex items-center"

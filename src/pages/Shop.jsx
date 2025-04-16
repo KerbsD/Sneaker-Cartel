@@ -9,7 +9,7 @@ function Shop() {
     const [shoes, setShoes] = useState();
     const [sort, setSort] = useState(true);
     const [brand, setBrand] = useState("");
-    const [isLoading, setIsLoading] = useState(true)
+    const [isLoading, setIsLoading] = useState(false)
 
     const Brands = (props) => {
         return (
@@ -20,7 +20,7 @@ function Shop() {
     }
 
     useEffect(() => {
-        setIsLoading(false);
+        setIsLoading(true);
         let isMounted = true;
         const controller = new AbortController();
 
@@ -31,7 +31,7 @@ function Shop() {
                         signal: controller.signal
                     });
                 console.log(response.data);
-                setIsLoading(true);
+                setIsLoading(false);
                 isMounted && setShoes(response.data);
             } catch (err) {
                 console.error(err);

@@ -1,5 +1,3 @@
-import { Link } from "react-router-dom";
-
 function brand(props) {
     return (
         <div class="w-25 h-25 bg-white snap-center grid place-content-center">

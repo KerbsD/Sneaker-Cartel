@@ -1,4 +1,3 @@
-import { address } from 'motion/react-client';
 import axios from '../api/axios';
 import useAuth from './useAuth';
 
@@ -9,9 +8,8 @@ function useRefreshToken() {
         const response = await axios.get('/refresh', {
             withCredentials: true
         });
+        
         setAuth(prev => {
-            // console.log(JSON.stringify(prev));
-            // console.log(response.data.accessToken);
             return {
                 ...prev,
                 roles: response.data.roles,

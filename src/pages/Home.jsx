@@ -7,12 +7,13 @@ import { motion } from "motion/react"
 import { Link } from "react-router-dom"
 
 function Home() {
-    const { auth } = useAuth();
     const [shoeList, setShoeList] = useState();
+    const [isLoading, setIsLoading] = useState(false);
     const axiosPrivate = useAxiosPrivate();
 
     useEffect(() => {
         let isMounted = true;
+        setIsLoading(true)
         const controller = new AbortController();
 
         const getAllShoes = async () => {
@@ -21,6 +22,7 @@ function Home() {
                     signal: controller.signal
                 });
                 isMounted && setShoeList(response.data);
+                setIsLoading(false)
             } catch (err) {
                 console.error(err);
                 if (err.code !== "ERR_CANCELED")
@@ -56,7 +58,7 @@ function Home() {
                                 viewport={{ amount: 0.5 }}
                             >
                                 <Link to={`/${shoe._id}`} key={shoe._id}>
-                                    <ItemView key={shoe._id} event={() => handleAddToCart(shoe._id, shoe.brand, shoe.color, shoe.price)} Icolor={shoe.color} folder={shoe.model} name={shoe.images[0]} Ibrand={shoe.brand} Iname={shoe.model} Iprice={shoe.price} />
+                                    <ItemView loading={isLoading} key={shoe._id} event={() => handleAddToCart(shoe._id, shoe.brand, shoe.color, shoe.price)} Icolor={shoe.color} folder={shoe.model} name={shoe.images[0]} Ibrand={shoe.brand} Iname={shoe.model} Iprice={shoe.price} />
                                 </Link>
                             </motion.div>
                         ))

@@ -5,7 +5,7 @@ function ItemView(props) {
     const [isSoldout, setIsSoldout] = useState(false)
 
     return (
-        props.loading ?
+        !props.loading ?
             <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}

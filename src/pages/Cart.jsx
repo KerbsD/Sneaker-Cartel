@@ -79,6 +79,7 @@ function Cart() {
 
     return (
         <div className="">
+            
             <div className={notif ? 'bg-slate-300 rounded-md duration-200 fixed left-1/2 -translate-x-1/2 z-50 flex items-center' : "left-0 h-0 duration-100"}>
                 <p className='font-medium px-2 py-0.5'>{notif}</p>
                 <div className={notif ? 'bg-red-400 rounded-r-md' : "h-0 "}>

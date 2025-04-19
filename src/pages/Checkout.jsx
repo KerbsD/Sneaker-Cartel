@@ -5,6 +5,8 @@ import useAxiosPrivate from '../hooks/useAxiosPrivate';
 import useAuth from "../hooks/useAuth";
 import DeliveryInput from "../components/DeliverInput";
 import ShipRadBtn from "../components/ShipRadBtn";
+import { debounce } from "lodash";
+import { CircleMinus } from "lucide-react"
 
 function Checkout() {
   const { auth } = useAuth();
@@ -15,6 +17,8 @@ function Checkout() {
   const [isLoading, setIsLoading] = useState(false);
   const [cart, setCart] = useState();
   const [shipping, setShipping] = useState(100);
+  const [errorMsg, setErrorMsg] = useState("")
+  const [orderDetails, setOrderDetails] = useState()
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -57,10 +61,26 @@ function Checkout() {
     setIsSummaryOpen(prev => !prev)
   }
 
-  const createOrder = () => {
-    
+  const createOrder = debounce(() => {
+    errorMsg ? setErrorMsg("") : null;
+    orderDetails ? setOrderDetails() : null;
 
-    const orderDetails = {
+    const missingFields = [
+      { value: firstName, message: "First name is missing" },
+      { value: lastName, message: "Last name is missing" },
+      { value: address, message: "Address is missing" },
+      { value: region, message: "Region is missing" },
+      { value: city, message: "City is missing" },
+      { value: postalCode, message: "Postal Code is missing" },
+      { value: phone, message: "Phone number is missing" }
+    ];
+
+    const error = missingFields.find(field => !field.value);
+    if (error) {
+      return setErrorMsg(error.message);
+    }
+
+    setOrderDetails({
       ordered_by: {
         name: `${firstName} ${lastName}`,
         email: "boijablo555@gmail.com",
@@ -80,19 +100,26 @@ function Checkout() {
       ],
       total_amount: shipping + cart?.reduce((acc, item) => acc + (item.exceeds_stock ? item.details.price * item.max_order : item.details.price * item.total_quantity), 0),
       payment_method: shipMethod
-    }
-
-    console.log(orderDetails)
+    })
 
     setIsLoading(true)
 
     setTimeout(() => {
       setIsLoading(false)
+      setErrorMsg("")
     }, 5000)
-  }
+  }, 500)
 
   return (
     <section className="p-2">
+
+      <div className={errorMsg ? 'bg-slate-300 rounded-md duration-200 fixed left-1/2 -translate-x-1/2 z-50 flex items-center' : "left-0 h-0 duration-100"}>
+        <p className='font-medium px-2 py-0.5'>{errorMsg}</p>
+        <div className={errorMsg ? 'bg-red-400 rounded-r-md' : "h-0 "}>
+          <CircleMinus size={35} strokeWidth={2} className={errorMsg ? 'inline-block p-1 invert' : "hidden"} />
+        </div>
+      </div>
+
       <h1 className="font-bold text-xl text-stone-100">Checkout</h1>
 
       <hr className="border-2 border-stone-100 rounded-md my-2" />

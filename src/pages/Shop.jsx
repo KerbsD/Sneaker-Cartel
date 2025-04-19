@@ -44,7 +44,7 @@ function Shop() {
             isMounted = false;
             setTimeout(() => {
                 controller.abort();
-            }, 1000)
+            }, 2200)
         }
     }, [])
 

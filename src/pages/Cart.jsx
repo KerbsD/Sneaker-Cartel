@@ -32,7 +32,7 @@ function Cart() {
                     },
                     signal: controller.signal
                 });
-                console.log(response.data); 
+                console.log(response.data);
                 isMounted && setCart(response.data);
                 setIsLoading(false);
             } catch (err) {
@@ -46,7 +46,7 @@ function Cart() {
             isMounted = false;
             setTimeout(() => {
                 controller.abort();
-            }, 1000)
+            }, 2200)
         }
     }, [render])
 
@@ -90,7 +90,7 @@ function Cart() {
             {
                 !isLoading
                     ?
-                    cart && cart.length > 0
+                    cart?.length > 0
                         ?
                         cart.map(item => {
                             return <CartItem

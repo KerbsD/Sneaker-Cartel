@@ -9,7 +9,7 @@ import Animate from "react-smooth";
 import axios from "../../api/axios";
 
 function Login() {
-    const { setAuth, auth } = useAuth();
+    const { setAuth } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
     const from = location.state?.from?.pathname || "/home"
@@ -21,6 +21,7 @@ function Login() {
     const [pwd, setPwd] = useState('');
     const [errMsg, setErrMsg] = useState('');
     const [check, toggleCheck] = useToggle("persist", false);
+    const [isLoading, setIsLoading] = useState(false)
 
     useEffect(() => {
         userRef.current.focus();
@@ -33,6 +34,8 @@ function Login() {
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
+            setIsLoading(true)
+
             const response = await axios.post('/auth',
                 JSON.stringify({ email, pwd }),
                 {
@@ -65,6 +68,8 @@ function Login() {
                 setErrMsg('Login Failed');
             }
             errRef.current.focus();
+        } finally {
+            setIsLoading(false)
         }
     }
 
@@ -94,7 +99,7 @@ function Login() {
                         value={pwd}
                         inLog={true}
                     />
-                    <Button label={"Login"} style={"bg-orange-400 text-zinc-50 w-full"} />
+                    <Button loading={isLoading} disabled={isLoading} label={"Login"} style={!isLoading ? "bg-orange-400 text-zinc-50 w-full" : "bg-orange-700 text-zinc-50 w-full"} />
                 </form>
                 <div className='mb-2 ml-1'>
                     <input

@@ -78,7 +78,7 @@ function ShoeDetails() {
             isMounted = false;
             setTimeout(() => {
                 controller.abort();
-            }, 1000)
+            }, 2200)
         }
     }, [success]);
 
@@ -104,9 +104,9 @@ function ShoeDetails() {
             ]
         }
 
-        const foundItem = cart.length > 0 ? cart?.find(item => item._id.product_id == id && item._id.size == size) : null;
+        const foundItem = cart?.length > 0 ? cart?.find(item => item._id.product_id == id && item._id.size == size) : null;
 
-        foundItem?.exceeds_stock ?  setExceedQuant("You've exceeded this item quantity") : null;
+        foundItem?.exceeds_stock ? setExceedQuant(`You've exceeded this item quantity: Size: ${size}`) : null;
 
         try {
             const response = await axiosPrivate.post('/carts', itemDetails);
@@ -203,7 +203,7 @@ function ShoeDetails() {
                                 </select>
                             }
                         </div>
-                        <p className='my-12 text-center text-stone-100'>{exceedQuant}</p>
+                        <p className={exceedQuant ? 'my-12 text-center text-stone-100 duration-200' : "opacity-0 duration-200 my-0"}>{exceedQuant}</p>
                         <motion.button
                             onClick={() => handleAddToCart(shoeDetails._id, selectedSize, quantity)}
                             whileTap={{ scale: 0.9 }}

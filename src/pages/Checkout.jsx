@@ -18,7 +18,6 @@ function Checkout() {
   const [cart, setCart] = useState();
   const [shipping, setShipping] = useState(100);
   const [errorMsg, setErrorMsg] = useState("")
-  const [orderDetails, setOrderDetails] = useState()
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -57,13 +56,17 @@ function Checkout() {
     }
   }, [])
 
+  useEffect(() => {
+    setErrorMsg("")
+    setIsLoading(false)
+  }, [firstName, lastName, address, region, city, postalCode, phone])
+
   const handleToggleSummary = () => {
     setIsSummaryOpen(prev => !prev)
   }
 
-  const createOrder = debounce(() => {
-    errorMsg ? setErrorMsg("") : null;
-    orderDetails ? setOrderDetails() : null;
+  const createOrder = debounce(async () => {
+    setIsLoading(true)
 
     const missingFields = [
       { value: firstName, message: "First name is missing" },
@@ -72,42 +75,51 @@ function Checkout() {
       { value: region, message: "Region is missing" },
       { value: city, message: "City is missing" },
       { value: postalCode, message: "Postal Code is missing" },
-      { value: phone, message: "Phone number is missing" }
+      { value: phone, message: "Phone number is missing" },
+      { value: shipMethod, message: "Select Shipping method" }
     ];
 
     const error = missingFields.find(field => !field.value);
+
     if (error) {
-      return setErrorMsg(error.message);
+      return setErrorMsg(error.message)
     }
 
-    setOrderDetails({
-      ordered_by: {
-        name: `${firstName} ${lastName}`,
-        email: "boijablo555@gmail.com",
-        address: `${address}, ${city}, ${region}, ${postalCode}`,
-        number: `${phone}`
+    const orderDetails = ({
+      'ordered_by': {
+        'name': `${firstName} ${lastName}`,
+        'email': "boijablo555@gmail.com",
+        'address': `${address}, ${city}, ${region}, ${postalCode}`,
+        'number': `${phone}`
       },
-      items: [
-        cart?.map(item => {
-          return {
-            product_id: item._id?.product_id,
-            name: `${item.details.brand} ${item.details.model} - ${item.details.color}`,
-            size: item._id.size,
-            quantity: item.exceeds_stock ? item.max_order : item.total_quantity,
-            price: item.exceeds_stock ? item.details.price * item.max_order : item.details.price * item.total_quantity
-          }
-        })
-      ],
-      total_amount: shipping + cart?.reduce((acc, item) => acc + (item.exceeds_stock ? item.details.price * item.max_order : item.details.price * item.total_quantity), 0),
-      payment_method: shipMethod
+      'items': cart?.map(item => {
+        return {
+          'product_id': item._id?.product_id,
+          'name': `${item.details.brand} ${item.details.model} - ${item.details.color}`,
+          'size': item._id.size,
+          'quantity': parseInt(item.exceeds_stock ? item.max_order : item.total_quantity),
+          'price': parseInt(item.exceeds_stock ? item.details.price * item.max_order : item.details.price * item.total_quantity)
+        }
+      }),
+      'total_amount': parseInt(shipping + cart?.reduce((acc, item) => acc + (item.exceeds_stock ? item.details.price * item.max_order : item.details.price * item.total_quantity), 0)),
+      'payment_method': shipMethod
     })
 
-    setIsLoading(true)
-
-    setTimeout(() => {
+    try {
+      const response = await axiosPrivate.post('/orders', orderDetails);
+      console.log("Ordered Successfully", response);
+      setFirstName("");
+      setLastName("");
+      setAddress("");
+      setRegion("");
+      setCity("");
+      setPostalCode("");
+      setPhone("")
+      setShipMethod("")
       setIsLoading(false)
-      setErrorMsg("")
-    }, 5000)
+    } catch (err) {
+      console.log(err)
+    } 
   }, 500)
 
   return (
@@ -183,13 +195,13 @@ function Checkout() {
       <div>
         <p className="text-stone-100 mt-3 text-xl font-bold">Delivery</p>
         <div>
-          <DeliveryInput onChange={e => setFirstName(e.target.value)} value={firstName} placeholder={"First Name"} />
-          <DeliveryInput onChange={e => setLastName(e.target.value)} value={lastName} placeholder={"Last Name"} />
-          <DeliveryInput onChange={e => setAddress(e.target.value)} value={address} placeholder={"Lot/Number, Street"} />
-          <DeliveryInput onChange={e => setRegion(e.target.value)} value={region} placeholder={"Region"} />
-          <DeliveryInput onChange={e => setCity(e.target.value)} value={city} placeholder={"City"} />
-          <DeliveryInput onChange={e => setPostalCode(e.target.value)} value={postalCode} placeholder={"Postal Code"} />
-          <DeliveryInput onChange={e => setPhone(e.target.value)} value={phone} placeholder={"Phone"} />
+          <DeliveryInput type={"text"} onChange={e => setFirstName(e.target.value)} value={firstName} placeholder={"First Name"} />
+          <DeliveryInput type={"text"} onChange={e => setLastName(e.target.value)} value={lastName} placeholder={"Last Name"} />
+          <DeliveryInput type={"text"} onChange={e => setAddress(e.target.value)} value={address} placeholder={"Lot/Number, Street"} />
+          <DeliveryInput type={"text"} onChange={e => setRegion(e.target.value)} value={region} placeholder={"Region"} />
+          <DeliveryInput type={"text"} onChange={e => setCity(e.target.value)} value={city} placeholder={"City"} />
+          <DeliveryInput type={"number"} onChange={e => setPostalCode(e.target.value)} value={postalCode} placeholder={"Postal Code"} />
+          <DeliveryInput type={"number"} onChange={e => setPhone(e.target.value)} value={phone} placeholder={"Phone"} />
         </div>
       </div>
 

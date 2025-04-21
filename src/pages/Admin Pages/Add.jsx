@@ -61,8 +61,8 @@ function ListShoe() {
             "stocks":
                 sizes.map((size, index) => (
                     {
-                        "size": size, 
-                        "stock": stocks[index], 
+                        "size": parseInt(size), 
+                        "stock": parseInt(stocks[index]), 
                     }
                 ))
         }
@@ -117,11 +117,11 @@ function ListShoe() {
                     <div className='flex'>
                         <div className='py-2 mr-2'>
                             <label className="text-stone-100 font-light">Sizes:</label>
-                            <input className="my-2 bg-stone-100 p-1 rounded-sm w-full" value={size} onChange={e => setSize(e.target.value)} type="text" />
+                            <input className="my-2 bg-stone-100 p-1 rounded-sm w-full" value={size} onChange={e => setSize(e.target.value)} type="number" />
                         </div>
                         <div className='py-2'>
                             <label className="text-stone-100 font-light">Stock:</label>
-                            <input className="my-2 bg-stone-100 p-1 rounded-sm w-full" value={stock} onChange={e => setStock(e.target.value)} type="text" />
+                            <input className="my-2 bg-stone-100 p-1 rounded-sm w-full" value={stock} onChange={e => setStock(e.target.value)} type="number" />
                         </div>
                     </div>
                     <button className='py-1 rounded-md mt-1 bg-orange-400 text-stone-100' onClick={() => addItem(size, stock)}>Add</button>

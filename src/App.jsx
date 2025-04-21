@@ -15,6 +15,7 @@ const PageLayout = lazy(() => import('./pages/PageLayout'));
 const ListShoe = lazy(() => import('./pages/Admin Pages/Add'));
 const ShoeDetails = lazy(() => import('./pages/ShoeDetails'));
 const Checkout = lazy(() => import('./pages/Checkout'));
+const Success = lazy(() => import('./components/Success'));
 
 const ROLES = {
   'User': 2001,
@@ -41,6 +42,7 @@ function App() {
               <Route path="cart" element={<Cart />} />
               <Route path=":shoeId" element={<ShoeDetails />} />
               <Route path="checkout" element={<Checkout />} />
+              <Route path="success" element={<Success />} />
             </Route>
           </Route>
         </Route>

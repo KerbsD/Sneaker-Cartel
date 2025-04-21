@@ -121,6 +121,7 @@ function ShoeDetails() {
                 console.log(err);
             } else if (err.response?.status === 400) {
                 console.log('Invalid type provided.');
+                setBagWarn(err.message)
             } else {
                 console.log(err)
             }
@@ -191,23 +192,26 @@ function ShoeDetails() {
                         <div>
                             <p className='text-stone-100 text-base'>Quantity:</p>
                             {
-                                <select className='bg-stone-100 px-1 w-10 font-bold outline-none'
-                                    onChange={(e) => setQuantity(parseInt(e.target.value))}>
-                                    {
-                                        stock.map((number) => (
+                                stock.length === 0 ? (
+                                    <p className='text-stone-100 text-base mb-4'>Out of Stock</p>
+                                ) : (
+                                    <select className='bg-stone-100 px-1 w-10 font-bold outline-none mb-4'
+                                        onChange={(e) => setQuantity(parseInt(e.target.value))}>
+                                        {stock.map(number => (
                                             <option className='font-bold' key={number} value={number}>
                                                 {number}
                                             </option>
-                                        ))
-                                    }
-                                </select>
+                                        ))}
+                                    </select>
+                                )
                             }
                         </div>
                         <p className={exceedQuant ? 'my-12 text-center text-stone-100 duration-200' : "opacity-0 duration-200 my-0"}>{exceedQuant}</p>
                         <motion.button
+                            disabled={stock.length === 0}
                             onClick={() => handleAddToCart(shoeDetails._id, selectedSize, quantity)}
                             whileTap={{ scale: 0.9 }}
-                            className='mx-auto border rounded-md px-4 text-2xl bg-green-600 text-stone-100 border-green-800 font-bold py-2 active:bg-green-800 active:text-stone-300 duration-300 flex items-center'
+                            className='mx-auto border rounded-md px-4 text-2xl bg-green-600 text-stone-100 border-green-800 font-bold py-2 active:bg-green-800 active:text-stone-300 duration-300 flex items-center disabled:bg-green-600 disabled:text-stone-100 disabled:cursor-not-allowed disabled:opacity-50'
                         >
                             <ShoppingBag className='mr-4' size={30} />Add to Bag
                         </motion.button>

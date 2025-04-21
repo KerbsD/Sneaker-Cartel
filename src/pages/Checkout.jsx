@@ -7,8 +7,11 @@ import DeliveryInput from "../components/DeliverInput";
 import ShipRadBtn from "../components/ShipRadBtn";
 import { debounce } from "lodash";
 import { CircleMinus } from "lucide-react"
+import { useNavigate } from "react-router-dom";
+import { u } from "motion/react-client";
 
 function Checkout() {
+  const navigate = useNavigate()
   const { auth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
   const controller = new AbortController();
@@ -87,10 +90,12 @@ function Checkout() {
 
     const orderDetails = ({
       'ordered_by': {
+        'user_id': auth.id,
         'name': `${firstName} ${lastName}`,
         'email': "boijablo555@gmail.com",
         'address': `${address}, ${city}, ${region}, ${postalCode}`,
         'number': `${phone}`
+
       },
       'items': cart?.map(item => {
         return {
@@ -108,6 +113,7 @@ function Checkout() {
     try {
       const response = await axiosPrivate.post('/orders', orderDetails);
       console.log("Ordered Successfully", response);
+      navigate("/success", { replace: true })
       setFirstName("");
       setLastName("");
       setAddress("");
@@ -119,12 +125,11 @@ function Checkout() {
       setIsLoading(false)
     } catch (err) {
       console.log(err)
-    } 
+    }
   }, 500)
 
   return (
     <section className="p-2">
-
       <div className={errorMsg ? 'bg-slate-300 rounded-md duration-200 fixed left-1/2 -translate-x-1/2 z-50 flex items-center' : "left-0 h-0 duration-100"}>
         <p className='font-medium px-2 py-0.5'>{errorMsg}</p>
         <div className={errorMsg ? 'bg-red-400 rounded-r-md' : "h-0 "}>

@@ -1,9 +1,12 @@
 import { motion } from "motion/react"
 import { Link } from 'react-router-dom'
+import { useEffect } from 'react';
 
 const Success = () => {
+    useEffect(() => {window.scrollTo(0, 0);}, [])
+
     return (
-        <div className='w-[100vw] h-[85vh] z-60'>
+        <div className='w-[100vw] h-[85vh] z-60 md:left-0'>
             <motion.div
                 initial={{ opacity: 0, y: -50 }}
                 animate={{ opacity: 1, y: 0 }}
